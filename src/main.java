@@ -42,8 +42,8 @@ public class main {
 		LinkedHashMap<String,ArrayList<Object>> map = readObj.readFile();
         int row=readObj.getHeader();
         
-          
-        queryExecute q = new queryExecute(selectedFields , map, row, obj.where_fields, obj.logicalOperators, obj.order_by, obj.containing_functions,obj.group_by);
+         
+       /* queryExecute q = new queryExecute(selectedFields , map, row, obj.where_fields, obj.logicalOperators, obj.order_by, obj.containing_functions,obj.group_by);
         q.Matrix();
         if(obj.where_fields.size() !=0 && obj.order_by.length() !=0) {
        	 q.exWhere();
@@ -75,7 +75,7 @@ public class main {
             q.group();
         else
        	 q.colfeild();
-
+*/
 	}	
 		
 

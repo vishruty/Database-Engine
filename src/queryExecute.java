@@ -16,7 +16,7 @@ public class queryExecute {
 	     Set<String> key= null;
 	     String arr[][]=null;
 		 HashMap<String,Integer> index= new HashMap<>();
-		ArrayList<String> containing_functions=new ArrayList <>();
+		 ArrayList<String> containing_functions=new ArrayList <>();
 
 		 
 		 
@@ -47,13 +47,13 @@ public class queryExecute {
 	     
 	 	void Matrix() {
 		    arr=new String[row+1][key.size()];
-		    int count1=1;
-		    int count2=0;
+		    int c=0;
 		    int ind = 0;
 		    for(String each : key) {
 		    	index.put(each, ind);
 		    	ind++;
-		    	arr[0][count2]=each;
+		    	arr[0][c]=each;
+		    	 int r=1;
 		    	ArrayList<Object> obj=map.get(each);
 		    	for(Object ele : obj) {
 		    		String s =(String)ele;
@@ -62,11 +62,10 @@ public class queryExecute {
 		    		for(String s2 : s1) {
 		    			s=s+s2;
 		    		}
-		    		arr[count1][count2]=s;
-		    		count1++;
+		    		arr[r][c]=s;
+		    		r++;
 		    	}
-		    	count1=1;
-		    	count2++;
+		    	c++;
 		    }
 		    
 	 	}
@@ -82,7 +81,7 @@ public class queryExecute {
 	    				
 	    			}
 	    		}
-	    		//System.out.println(arr[0][col]);
+	    		
 	    	 ArrayList<Integer> id_1=new ArrayList<>();
 	   		 for(int i=1;i<row+1;i++) {
 	   			 if(cond.get(1).equals("=")) {
