@@ -30,7 +30,7 @@ public class queryExecute {
  		
 	     queryExecute(ArrayList<String> selectedFields, LinkedHashMap<String,ArrayList<Object>> map,int row,ArrayList<ArrayList<String>> where_fields, 	ArrayList<String> logicalOperators,String order_by,ArrayList<String> containing_functions,String group_by){
 	    	 super();
-	    	 this.col=selectedFields;
+	    	 this.selectedFields=selectedFields;
 	    	 this.map=map;
 	    	 this.row=row;
 	    	 key = map.keySet();
@@ -70,33 +70,38 @@ public class queryExecute {
 		    
 	 	}
 	 	
-	 	void exWhere() {
-	 		ArrayList<ArrayList<Integer>> id = new ArrayList<>();
-	    	for(ArrayList<String> cond : where_fields) {
-	    		int col=0;
-	    		for(int i=0 ; i< key.size();i++) {
-	    			if(arr[0][i].equals(cond.get(0))) {
-	    				col=i;
-	    				break;
-	    				
-	    			}
+	void exWhere() {
+		ArrayList<ArrayList<Integer>> id = new ArrayList<>();
+	    for(ArrayList<String> cond : where_fields) {
+	    	int col=0;
+	    	for(int i=0 ; i< key.size();i++) {
+	    		if(arr[0][i].equals(cond.get(0))) {
+	    			col=i;
+	    			break;	
 	    		}
+	    	}
 	    		
 	    	 ArrayList<Integer> id_1=new ArrayList<>();
 	   		 for(int i=1;i<row+1;i++) {
+	   			 //System.out.println(arr[i][col]);
 	   			 if(cond.get(1).equals("=")) {
-	   				 if(Pattern.matches( "[0-9]*",arr[i][col])) {
+	   				 if( Pattern.matches( "[0-9]+", arr[i][col])) {
+	   					 System.out.println("int matched");
 	   					 int a=Integer.parseInt(arr[i][col]);
 	   					 int b=Integer.parseInt(cond.get(2));
-	   					 if(a == b)
+	   					 if(a == b) {
 	   						 id_1.add(i);
+	   						// System.out.println("i added " + i);
+	   					 }
 	   				 }
 	   				 else {
 	   					 String a = arr[i][col].toLowerCase();
 	   					 String b = cond.get(2).toLowerCase();
+	   					// System.out.println("a :" + a +" b: "+ b);
+	   					// System.out.println(a.equals(b));
 	   					 if(a.equals(b)) {
 	   						 id_1.add(i);
-	   						 //System.out.println("helo");
+	   						// System.out.println("i added " +i);
 	   					 }
 	   				 }
 	   			 }
@@ -112,7 +117,7 @@ public class queryExecute {
 	   					 String b = cond.get(2).toLowerCase();
 	   					 if( ! a.equals(b)) {
 	   						 id_1.add(i);
-	   						 //System.out.println("helo");
+	   						
 	   					 }
 	   				 }
 	   			 }
@@ -146,22 +151,13 @@ public class queryExecute {
 	   		 }
 	   		 id.add(id_1);
 
-	    		
-	    	}
-	    	
-	    	 for(ArrayList<Integer> temp1 : id) {
-	    		 for(Integer temp2 : temp1) {
-	    			 System.out.print(temp2 + " ");
-	    		 }
-	    		 System.out.println();
-	    		 
-	    	 }
+	    }
+	    	 
 	         id_2 = new ArrayList<>(id.get(0));
 	    	 int get1 = 1;
 	    	 for(String log : logicalOperators) {
 	    		 if(log.equals("and")) {
 	    			 id_2.retainAll(id.get(get1));
-	    			 //System.out.println(id_2.size());
 	    		 }
 	    		 else if(log.equals("or")){
 	    			 for(Integer temp1 : id.get(get1)) {
@@ -176,20 +172,8 @@ public class queryExecute {
 	    					 id_2.add(temp1);
 	    			 }
 	    		 }
-	    		// System.out.println("hello");
 	    		 get1++;
-	    	 }
-	    	 for(Integer temp : id_2) {
-	    		 System.out.print(temp+" ");
-	    	 }
-	    	 System.out.println();
-	    	 for(Integer temp : id_2) {
-	    		 for(int j=0;j<key.size();j++) {
-	    			 System.out.print(arr[temp][j]+" ");
-	    		 }
-	    		 System.out.println();
-	    	 }
-	    	
+	    	 }	 
 	 	}
 	 	
 	 	
@@ -217,33 +201,36 @@ public class queryExecute {
 		    		 int b=Integer.parseInt(arr[(int)a2][val1]);
 		    		 return a-b;
 		    	 });
-		     }
-	    	
-	    	 
+		     }	
 	     }
+	 	
 	    void colfeild() {
 	    	List<String> col = selectedFields;
+	    	
 	    	List<Integer> val = new ArrayList();
-	    	for(String temp : col) {
-	    		for(int j=0;j<key.size();j++) {
-	    			String a= temp.toLowerCase();
-	    			String b = arr[0][j].toLowerCase();
-	    			if(a.equals(b)) {
-	    				val.add(j);
-	    				break;
-	    			}
-	    				
-	    		}
-	    	}
 	    	if(col.get(0).equals("*")) {
-	    		for(Integer temp : id_2) {
+	    		System.out.println("id of 1st entry" + id_2.get(0));
+	    		for(int temp : id_2) {
+	    			System.out.println("in here");
 	    			for(int j=0;j<key.size();j++) {
 	    				System.out.print(arr[temp][j] +" ");
 	    			}
 	    			System.out.println();
 	    		}
 	    	}
+	    	
 	    	else {
+	    		for(String temp : col) {
+	    			
+		    		for(int j=0;j<key.size();j++) {
+		    			String a= temp.toLowerCase();
+		    			String b = arr[0][j].toLowerCase();
+		    			if(a.equals(b)) {
+		    				val.add(j);
+		    				break;
+		    			}				
+		    		}
+		    	}
 	    		for(Integer i : id_2) {
 	    			for(Integer j : val) {
 	    				System.out.print(arr[i][j] + " ");
