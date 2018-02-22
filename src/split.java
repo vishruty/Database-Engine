@@ -12,7 +12,7 @@ public class split {
 	ArrayList<String> containing_functions=new ArrayList <>();
 	ArrayList<String> logicalOperators =new ArrayList<String>();
 	ArrayList<String> selected_fields=new ArrayList<String>();
-    ArrayList<ArrayList<String>> where_fields = new ArrayList<>();//where condition
+    ArrayList<ArrayList<String>> where_fields = new ArrayList<>();
 
 	String order_by="";
 	String group_by="";
@@ -90,8 +90,6 @@ public class split {
 	}
 	
 	
-	
-	
 	int splitWhereFields() {
 		int temp=-1;
 		String k=filter.toString();
@@ -128,7 +126,7 @@ public class split {
 				}	
 			}
 		}
-		System.out.println(where_fields);
+		//System.out.println(where_fields);
 		return 1;
 	}
 	

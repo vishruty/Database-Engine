@@ -12,7 +12,7 @@ public class queryExecute {
 	  List<String> col= new ArrayList<String> ();
 	     LinkedHashMap<String,ArrayList<Object>> map = null;
 	     int row;
-	 	 ArrayList<Integer> id_2 =null;
+	 	 ArrayList<Integer> merged_result =null;
 	     Set<String> key= null;
 	     String arr[][]=null;
 		 HashMap<String,Integer> index= new HashMap<>();
@@ -25,10 +25,9 @@ public class queryExecute {
  		ArrayList<String> logicalOperators =new ArrayList<String>();
  		String order_by="";
  		String group_by;
+
  		
-		 //change fun1
- 		
-	     queryExecute(ArrayList<String> selectedFields, LinkedHashMap<String,ArrayList<Object>> map,int row,ArrayList<ArrayList<String>> where_fields, 	ArrayList<String> logicalOperators,String order_by,ArrayList<String> containing_functions,String group_by){
+	     queryExecute(ArrayList<String> selectedFields, LinkedHashMap<String,ArrayList<Object>> map,ArrayList<ArrayList<String>> where_fields, 	ArrayList<String> logicalOperators,String order_by,ArrayList<String> containing_functions,String group_by, int row){
 	    	 super();
 	    	 this.selectedFields=selectedFields;
 	    	 this.map=map;
@@ -38,14 +37,14 @@ public class queryExecute {
 	    	this.where_fields=where_fields;
 	    	this.logicalOperators=logicalOperators;
 	    	 this.order_by=order_by;
-	    	 id_2 = new ArrayList<>();
+	    	 merged_result = new ArrayList<>();
 	    	 this.containing_functions=containing_functions;
 	    	 this.group_by=group_by;
 	    	 for(int i=1;i<=69;i++)
-	    		 id_2.add((Integer)i);
+	    		 merged_result.add((Integer)i);
 	     }
 	     
-	 	void Matrix() {
+	 	void matrixPopulate() {
 		    arr=new String[row+1][key.size()];
 		    int c=0;
 		    int ind = 0;
@@ -70,7 +69,7 @@ public class queryExecute {
 		    
 	 	}
 	 	
-	void exWhere() {
+	void whereExecute() {
 		ArrayList<ArrayList<Integer>> id = new ArrayList<>();
 	    for(ArrayList<String> cond : where_fields) {
 	    	int col=0;
@@ -86,7 +85,6 @@ public class queryExecute {
 	   			 //System.out.println(arr[i][col]);
 	   			 if(cond.get(1).equals("=")) {
 	   				 if( Pattern.matches( "[0-9]+", arr[i][col])) {
-	   					 System.out.println("int matched");
 	   					 int a=Integer.parseInt(arr[i][col]);
 	   					 int b=Integer.parseInt(cond.get(2));
 	   					 if(a == b) {
@@ -153,65 +151,61 @@ public class queryExecute {
 
 	    }
 	    	 
-	         id_2 = new ArrayList<>(id.get(0));
-	    	 int get1 = 1;
-	    	 for(String log : logicalOperators) {
-	    		 if(log.equals("and")) {
-	    			 id_2.retainAll(id.get(get1));
+	         merged_result = new ArrayList<>(id.get(0));
+	    	 int i = 1;
+	    	 for(String operator : logicalOperators) {
+	    		 if(operator.equals("and")) {
+	    			 merged_result.retainAll(id.get(i));
 	    		 }
-	    		 else if(log.equals("or")){
-	    			 for(Integer temp1 : id.get(get1)) {
+	    		 else if(operator.equals("or")){
+	    			 for(Integer temp1 : id.get(i)) {
 	    				 int flag=0;
-	    				 for(Integer temp2 : id_2) {
+	    				 for(Integer temp2 : merged_result) {
 	    					 if(temp1.equals(temp2)) {
 	    						 flag=1;
 	    						 break;
 	    					 }
 	    				 }
 	    				 if(flag==0)
-	    					 id_2.add(temp1);
+	    					 merged_result.add(temp1);
 	    			 }
 	    		 }
-	    		 get1++;
+	    		 i++;
 	    	 }	 
 	 	}
 	 	
 	 	
-	 	void orderBy() {
-	    	 String column = order_by;
-	    	 int val =0;
+	 	void orderByExecute() {
+	    	 String criteria = order_by;
+	    	 int col_no =0;
 	    	 for(int j=0;j<key.size();j++) {
-	    		 String a= column.toLowerCase();
+	    		 String a= criteria.toLowerCase();
 	 			 String b = arr[0][j].toLowerCase();
 	 			 if(a.equals(b)) {
-	 				 val=j;
+	 				 col_no=j;
 	 				 break;
 	 			 }
 	    	 }
-	    	 
-		     final int val1=val;
-		     if( ! Pattern.matches("[0-9]*", arr[1][val])) {
-		    	 Collections.sort(id_2, (a1,a2)->{
-		    		 return arr[a1][val1].compareTo(arr[a2][val1]);
+		     final int col_noF=col_no;
+		     if( ! Pattern.matches("[0-9]*", arr[1][col_no])) {
+		    	 Collections.sort(merged_result, (entry1,entry2)->{
+		    		 return arr[entry1][col_noF].compareTo(arr[entry2][col_noF]);
 		    	 });
 		     }
 		     else {
-		    	 Collections.sort(id_2, (a1,a2)->{
-		    		 int a=Integer.parseInt(arr[(int) a1][val1]);
-		    		 int b=Integer.parseInt(arr[(int)a2][val1]);
+		    	 Collections.sort(merged_result, (entry1,entry2)->{
+		    		 int a=Integer.parseInt(arr[ entry1][col_noF]);
+		    		 int b=Integer.parseInt(arr[ entry2][col_noF]);
 		    		 return a-b;
 		    	 });
 		     }	
 	     }
 	 	
-	    void colfeild() {
-	    	List<String> col = selectedFields;
+	    void displaySelectedFields() {
 	    	
-	    	List<Integer> val = new ArrayList();
-	    	if(col.get(0).equals("*")) {
-	    		System.out.println("id of 1st entry" + id_2.get(0));
-	    		for(int temp : id_2) {
-	    			System.out.println("in here");
+	    	List<Integer> colToDisplay = new ArrayList<Integer>();
+	    	if(selectedFields.get(0).equals("*")) {
+	    		for(int temp : merged_result) {
 	    			for(int j=0;j<key.size();j++) {
 	    				System.out.print(arr[temp][j] +" ");
 	    			}
@@ -220,128 +214,22 @@ public class queryExecute {
 	    	}
 	    	
 	    	else {
-	    		for(String temp : col) {
-	    			
+	    		for(String temp : selectedFields) {
 		    		for(int j=0;j<key.size();j++) {
 		    			String a= temp.toLowerCase();
 		    			String b = arr[0][j].toLowerCase();
 		    			if(a.equals(b)) {
-		    				val.add(j);
+		    				colToDisplay.add(j);
 		    				break;
 		    			}				
 		    		}
 		    	}
-	    		for(Integer i : id_2) {
-	    			for(Integer j : val) {
+	    		for(Integer i : merged_result) {
+	    			for(Integer j : colToDisplay) {
 	    				System.out.print(arr[i][j] + " ");
 	    			}
 	    			System.out.println();
 	    		}
 	    	}
-	    }
-	    void aggregate() {
-	    	for(String s : containing_functions) {
-	    		int p = s.indexOf("(");
-	    		int q = s.indexOf(")");
-	    		String s1 = s.substring(0,p);
-	    		String s2 = s.substring(p+1,q);
-	    		if(s1.toLowerCase().equals("sum")) {
-	    			ArrayList<Object> arr = map.get(s2);
-	     		    int count =0;
-	     		    for(Object temp : arr) {
-	     			int p1 = Integer.parseInt((String)temp);
-	     			count=count+p1;
-	     		   }
-	     		    System.out.println("SUM "+count);
-	    		}
-	    		else if(s1.toLowerCase().equals("max")) {
-	    			ArrayList<Object> arr = map.get(s2);
-	     		    int max1 =0;
-	     		    for(Object temp : arr) {
-	     			int p1 = Integer.parseInt((String)temp);
-	     			if(max1 < p1)
-	     				max1=p1;
-	     		   }
-	     		    System.out.println("MAX "+max1);
-	    		}
-	    		else if(s1.toLowerCase().equals("min")) {
-	    			ArrayList<Object> arr = map.get(s2);
-	     		    int min1 =9999999;
-	     		    for(Object temp : arr) {
-	     			int p1 = Integer.parseInt((String)temp);
-	     			if(min1 > p1)
-	     				min1=p1;
-	     		   }
-	     		    System.out.println("MIN "+min1);
-	    		}
-	    		else if(s1.toLowerCase().equals("count")) {
-	    			ArrayList<Object> arr = map.get(s2);
-	     		    System.out.println("Count "+arr.size());
-	    		}
-	    	}
-	    }
-	    void group() {
-	    	LinkedHashMap<String,Integer> m = new LinkedHashMap<>();
-	    	String s = containing_functions.get(0);
-	        int p = s.indexOf("(");
-	 		int q = s.indexOf(")");
-	 		String s1 = s.substring(0,p);
-	 		String s2 = s.substring(p+1,q);
-	        for(Integer i : id_2) {
-	        	String p1 = "";
-	        		String co = group_by; 
-	        		p1=p1+arr[i][index.get(co)]+",";
-	        	
-	    		//int col=index.get(cond2.get(0));
-	        	if(! m.containsKey(p1)) {
-	        		if(s1.toLowerCase().equals("sum")){
-	        			int val = Integer.parseInt(arr[i][index.get(s2)]);
-	        			m.put(p1,val);
-	        		}
-	        		else if(s1.toLowerCase().equals("max")){
-	        			int val = Integer.parseInt(arr[i][index.get(s2)]);
-	        			m.put(p1,val);
-	        		}
-	        		else if(s1.toLowerCase().equals("min")){
-	        			int val = Integer.parseInt(arr[i][index.get(s2)]);
-	        			m.put(p1,val);
-	        		}
-	        		else if(s1.toLowerCase().equals("count")){
-	        			//int val = Integer.parseInt(arr[i][index.get(s2)]);
-	        			m.put(p1,1);
-	        		}
-	        	}
-	        	else {
-	        		int a = m.get(p1);
-	        		if(s1.toLowerCase().equals("sum")){
-	        			int val = Integer.parseInt(arr[i][index.get(s2)]);
-	        			m.put(p1,val+a);
-	        		}
-	        		else if(s1.toLowerCase().equals("max")){
-	        			int val = Integer.parseInt(arr[i][index.get(s2)]);
-	        			if(val > a)
-	        				a=val;
-	        			m.put(p1,a);
-	        		}
-	        		else if(s1.toLowerCase().equals("min")){
-	        			int val = Integer.parseInt(arr[i][index.get(s2)]);
-	        			if(val < a)
-	        				a=val;
-	        			m.put(p1,a);
-	        		}
-	        		else if(s1.toLowerCase().equals("count")){
-	        			//int val = Integer.parseInt(arr[i][index.get(s2)]);
-	        			m.put(p1,1+a);
-	        		}
-	        	}
-	        }
-	        Set<String> key=m.keySet();
-	        for(String temp : key) {
-	        	String str[]=temp.split(",");
-	        	for(int i=0;i<str.length;i++)
-	        		System.out.print(str[i]+" ");
-	        	System.out.println(m.get(temp));
-	        }
-	    }
-	 	
+	    }	 	
 }
