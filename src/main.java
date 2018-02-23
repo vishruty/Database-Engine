@@ -14,12 +14,13 @@ public class main {
 		
 		split obj = new split(inputQuery);
 		String arr[] = obj.splitWords();
-		for(String part:arr) {
-			System.out.println(part);
-		}
+		
 		
 		String fileName=obj.splitFileName(arr);	
 		StringBuffer basePart = obj.splitBasePart(arr);
+		System.out.print(basePart);
+	
+		
 		StringBuffer filterPart = obj.splitFilterPart(arr);
 		ArrayList<String> logicalOperators=obj.splitLogicalOperators(arr);
 		

@@ -12,7 +12,7 @@ public class read {
     LinkedHashMap<String,ArrayList<Object>> readFile()throws IOException {
 	
 	LinkedHashMap<String,ArrayList<Object>> map = new LinkedHashMap<>();
-	File f=new File("/home/sapient/Desktop/vishruty/STS-WORKSPACE/Database-Engine/ipl.csv");
+	File f=new File("/home/vishruty/Documents/workspace-sts/Database-Engine/ipl.csv");
 	BufferedReader reader = new BufferedReader(new FileReader(f));
     String head=reader.readLine();
     
