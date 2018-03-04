@@ -10,7 +10,7 @@ class splitTest {
 	@BeforeEach
 	public void init() {
 		obj = new split("select city from ipl.csv where id = 100");
-	}
+	} 
 
 	@Test
 	void splitFileNameTest() {

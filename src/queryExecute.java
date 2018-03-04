@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-
-
 public class queryExecute {
 	  List<String> col= new ArrayList<String> ();
 	     LinkedHashMap<String,ArrayList<Object>> map = null;
@@ -231,5 +229,50 @@ public class queryExecute {
 	    			System.out.println();
 	    		}
 	    	}
-	    }	 	
+	    }	 
+	    
+	    void aggregate() {
+	    	for(String s : containing_functions) {
+	    		int p = s.indexOf("(");
+	    		int q = s.indexOf(")");
+	    		String function = s.substring(0,p);
+	    		String criteria = s.substring(p+1,q);
+	    		 if(function.toLowerCase().equals("count")) {
+	    			ArrayList<Object> arr = map.get(criteria);
+	     		    System.out.println("COUNT: "+arr.size());
+	    		}
+	    		 else if(function.toLowerCase().equals("sum")) {
+	    			ArrayList<Object> arr = map.get(criteria);
+	     		    int sum =0;
+	     		    for(Object temp : arr) {
+	     			int i = Integer.parseInt((String)temp);
+	     			sum=sum+i;
+	     		   }
+	     		    System.out.println("SUM: "+sum);
+	    		}
+	    		else if(function.toLowerCase().equals("min")) {
+		    		ArrayList<Object> arr = map.get(criteria);
+		     	    int minVal =9999999;
+		     	    for(Object temp : arr) {
+		     	    	int i = Integer.parseInt((String)temp);
+		     			if(minVal > i)
+		     				minVal=i;
+		     		   }
+		     		    System.out.println("MIN: "+minVal);
+		    		}
+	    		else if(function.toLowerCase().equals("max")) {
+	    			ArrayList<Object> arr = map.get(criteria);
+	     		    int maxVal =0;
+	     		    for(Object temp : arr) {
+	     		    	int i = Integer.parseInt((String)temp);
+	     		    	if(maxVal < i)
+	     		    		maxVal=i;
+	     		   }
+	     		    System.out.println("MAX: "+maxVal);
+	    		}
+	    	
+	    		
+	    	}
+	    }
+	    
 }

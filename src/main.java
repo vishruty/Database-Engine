@@ -58,7 +58,8 @@ public class main {
        		 execute.displaySelectedFields();
        	 }
         }
-       
+        else if(obj.containing_functions.size()!=0)
+            execute.aggregate();
         else
        	 execute.displaySelectedFields();
 
